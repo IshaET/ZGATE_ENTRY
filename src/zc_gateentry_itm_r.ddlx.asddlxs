@@ -1,0 +1,172 @@
+@Metadata.layer: #CORE
+@UI.headerInfo: {
+  typeName: 'RGP/NRGP Gate entry',
+  typeNamePlural: 'RGP/NRGP Gate entry',
+  title: { value: 'Zgate' },
+  description: { value: 'ChallanNo' }
+}
+annotate entity ZC_GATEENTRY_itm_R with
+{
+
+   @UI.facet: [
+  {
+   id: 'Item',
+   purpose: #STANDARD,
+   type: #IDENTIFICATION_REFERENCE,
+   label: 'RGP/NRGP',
+   position: 10
+  }
+  ]
+    
+  @UI: {
+  lineItem:[{ position: 10, label: 'Gate No' }],
+  identification:[{ position: 10, label: 'Gate Entry No' }
+   ],
+  selectionField:[{ position: 10 }]
+  }
+  Zgate;
+  
+  @UI: {
+  lineItem:[{ position: 20, label: 'Challan No.' }],
+  identification:[{ position: 20, label: 'Challan No.' }
+   ],
+  selectionField:[{ position: 20 }]
+  }
+  @Consumption.valueHelpDefinition: [{
+    entity: { name: 'I_DeliveryDocumentItem', element: 'DeliveryDocument' }
+}]
+  ChallanNo;
+  
+  @UI: {
+    lineItem:[{ position: 30, label: 'Challan Item' }],
+    identification:[{ position: 30, label: 'Challan Item' }],
+    selectionField:[{ position: 30 }]
+  }  
+  @Consumption.valueHelpDefinition: [{
+  entity: { name: 'I_DeliveryDocumentItem', element: 'DeliveryDocumentItem' },
+  additionalBinding: [{ 
+    localElement: 'ChallanNo',          // your field
+    element:      'DeliveryDocument',   // VH field
+    usage:        #FILTER_AND_RESULT 
+  }]
+}]
+posnr;
+    
+ @UI: {
+    lineItem:[{ position: 40, label: 'Material Document' }],
+    identification:[{ position: 40, label: 'Material Document' }],
+    selectionField:[{ position: 40 }]
+  }
+  @Consumption.valueHelpDefinition: [{
+    entity: { name: 'ZI_VH_MATDOC_GATE', element: 'MaterialDocument' },
+    additionalBinding: [{ 
+      localElement: '_ADV_HEADr.Type',   // The field from Step 2 (Make sure it's populated on the UI!)
+      element:      'Type'  // Silently filters the F4 help
+    }]
+  }]  
+  Mblnr;
+//  @UI: {
+//  lineItem:[{ position: 40, label: 'Material Document' }],
+//  identification:[{ position: 40, label: 'Material Document' }
+//   ],
+//  selectionField:[{ position: 40 }]
+//  }
+//  @Consumption.valueHelpDefinition: [{
+//    entity: { name: 'ZI_VH_MATDOC_GATE', element: 'MaterialDocument' },
+//    additionalBinding: [{ 
+//      localElement: 'GateType',   // Local Field on Item Level (from Header)
+//      element: 'GateType',        // Field on Value Help View
+//      usage: #FILTER              // Applies the RGP/NRGP filter automatically!
+//    }]
+//  }]  
+//    Mblnr;
+    
+  @UI: {
+  lineItem:[{ position: 50, label: 'Item' }],
+  identification:[{ position: 50, label: 'Item' }
+   ],
+  selectionField:[{ position: 50 }]
+  }  
+   @Consumption.valueHelpDefinition: [{
+    entity: { name: 'I_MATERIALDOCUMENTITEM_2', element: 'MaterialDocumentItem' },
+    additionalBinding: [{ 
+      localElement: 'Mblnr', 
+      element: 'MaterialDocument', 
+      usage: #FILTER_AND_RESULT 
+    }]
+  }]
+    Zeile;
+    
+   @UI: {
+    lineItem:[{ position: 60, label: 'Material' }],
+    identification:[{ position: 60, label: 'Material' }]
+  }
+  Matnr;
+
+  @UI: {
+    lineItem:[{ position: 70, label: 'Material Description' }],
+    identification:[{ position: 70, label: 'Material Description' }]
+  }
+  Maktx;
+
+  @UI: {
+    lineItem:[{ position: 80, label: 'Batch' }],
+    identification:[{ position: 80, label: 'Batch' }]
+  }
+  Charg;
+
+  @UI: {
+    lineItem:[{ position: 90, label: 'Plant' }],
+    identification:[{ position: 90, label: 'Plant' }]
+  }
+  Werks;
+
+  @UI: {
+    lineItem:[{ position: 100, label: 'Quantity' }],
+    identification:[{ position: 100, label: 'Quantity' }]
+  }
+  Quantity;
+
+  @UI: {
+    lineItem:[{ position: 110, label: 'UoM' }],
+    identification:[{ position: 110, label: 'UoM' }]
+  }
+  Uom;
+
+  @UI: {
+    lineItem:[{ position: 110, label: 'Value' }],
+    identification:[{ position: 110, label: 'Value' }]
+  }
+  Value;
+
+  @UI: {
+    lineItem:[{ position: 120, label: 'Return Date' }],
+    identification:[{ position: 120, label: 'Return Date' }]
+  }
+  ReturnDate;
+
+  @UI: {
+    lineItem:[{ position: 130, label: 'Return Qty' }],
+    identification:[{ position: 130, label: 'Return Qty' }]
+  }
+  ReturnQty;
+
+  @UI: {
+    lineItem:[{ position: 140, label: 'Balance Qty' }],
+    identification:[{ position: 140, label: 'Balance Qty' }]
+  }
+  BalanceQty;
+
+  @UI: {
+    lineItem:[{ position: 150, label: 'Remarks' }],
+    identification:[{ position: 150, label: 'Remarks' }]
+  }
+  Remarks;
+  
+  @UI: {
+    lineItem:[{ position: 160, label: 'Remarks' }],
+    identification:[{ position: 160, label: 'Remarks' }]
+  }
+  gatetype;
+
+}

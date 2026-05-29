@@ -1,0 +1,156 @@
+    @Metadata.layer:  #CORE
+@UI.headerInfo: {
+  typeName: 'Gate PO Entry',
+  typeNamePlural: 'Gate PO Entries',
+  title: { value: 'Zgate' },
+  description: { value: 'Outbounddelivery' }
+}
+
+annotate entity ZC_GATEENTRY_ITM_S
+    with 
+{
+    @UI.facet: [
+  {
+   id: 'Item',
+   purpose: #STANDARD,
+   type: #IDENTIFICATION_REFERENCE,
+   label: 'Gate PO Details',
+   position: 10
+  }
+  ]
+
+  /* =========================
+     KEYS
+     ========================= */
+  @UI: {
+    lineItem:[{ position: 10, label: 'Gate No' }],
+    identification:[{ position: 10, label: 'Gate No' }],
+    selectionField:[{ position: 10 }]
+  }
+  zgate;
+  
+  @UI: {
+    lineItem:[{ position: 20, label: 'Delivery No.' }],
+    identification:[{ position: 20, label: 'Delivery No.' }],
+    selectionField:[{ position: 20 }]
+  }
+  
+@Consumption.filter.multipleSelections: true
+
+  @Consumption.valueHelpDefinition: [{
+  entity: {
+    name: 'ZI_DelivDocItem_VH',
+    element: 'DeliveryDocument'
+  },
+   additionalBinding: [
+      { localElement: '_ADV_HEAD1.Plant', element: 'Plant' },
+      
+      // Pass Header Checkbox value to VH calculated field
+      { localElement: '_ADV_HEAD1.Chk1', element: 'Chk1' } 
+    ]
+  }]
+ 
+Outbounddelivery;
+//   @Consumption.valueHelpDefinition: [{
+//      entity: {
+//        name: 'I_DeliveryDocumentitem',
+//        element: 'DeliveryDocument'
+//      },
+//      additionalBinding: [
+//    { localElement: '_ADV_HEAD1.Plant', element: 'Plant' } ]
+//  }]
+//  Outbounddelivery;
+  
+  @UI: {
+    lineItem:[{ position: 30, label: 'Line Item' }],
+    identification:[{ position: 30, label: 'Line Item' }],
+    selectionField:[{ position: 30 }]
+  }
+  
+  @Consumption.filter.multipleSelections: true
+  
+  @Consumption.valueHelpDefinition: [{
+      entity: {
+        name: 'I_DeliveryDocumentItem',
+        element: 'DeliveryDocumentItem'
+      },
+      additionalBinding: [{ localElement: 'Outbounddelivery', element: 'DeliveryDocument' }]
+  }]
+  Outbounddeliveryitem;
+  
+  @UI: {
+    lineItem:[{ position: 40, label: 'Material Code' }],
+    identification:[{ position: 40, label: 'Material Code' }],
+    selectionField:[{ position: 40 }]
+  }
+  Product;
+  
+  @UI: {
+    lineItem:[{ position: 50, label: 'Material Description' }],
+    identification:[{ position: 50, label: 'Material Description' }],
+    selectionField:[{ position: 50 }]
+  }
+  Productdescription;
+  
+  @UI: {
+    lineItem:[{ position: 60, label: 'Batch' }],
+    identification:[{ position: 60, label: 'Batch' }],
+    selectionField:[{ position: 60 }]
+  }
+  Batch;
+  
+  @UI: {
+    lineItem:[{ position: 70, label: 'Storage Location' }],
+    identification:[{ position: 70, label: 'Storage Location' }],
+    selectionField:[{ position: 70 }]
+  }
+   @Consumption.valueHelpDefinition: [{
+      entity: {
+        name: 'I_OUTBOUNDDELIVERYITEM',
+        element: 'StorageLocation'
+      }
+  }]
+  Storagelocation;
+  
+  @UI: {
+    lineItem:[{ position: 80, label: 'Customer Name' }],
+    identification:[{ position: 80, label: 'Customer Name' }],
+    selectionField:[{ position: 80 }]
+  }
+  Soldtoparty;
+  
+  @UI: {
+    lineItem:[{ position: 90, label: 'Customer Descripion' }],
+    identification:[{ position: 90, label: 'Customer Descripion' }],
+    selectionField:[{ position: 90 }]
+  }
+  Customerdescription;
+  
+  @UI: {
+    lineItem:[{ position: 100, label: 'UOM' }],
+    identification:[{ position: 100, label: 'UOM' }],
+    selectionField:[{ position: 100 }]
+  }
+  Baseunit;
+  
+  @UI: {
+    lineItem:[{ position: 110, label: 'Quantity' }],
+    identification:[{ position: 110, label: 'Quantity' }],
+    selectionField:[{ position: 110 }]
+  }
+  Actualdeliveryquantity;
+  
+  @UI: {
+    lineItem:[{ position: 120, label: 'Remark' }],
+    identification:[{ position: 120, label: 'Remark' }],
+    selectionField:[{ position: 120 }]
+  }
+  Remark;
+  
+  
+  /* Associations */
+//  _ADV_HEAD1;
+  
+  
+    
+}

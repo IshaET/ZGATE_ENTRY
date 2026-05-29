@@ -1,0 +1,102 @@
+managed implementation in class zbp_i_gateentry_hdr_s unique;
+strict ( 2 );
+with draft;
+define behavior for ZI_GATEENTRY_HDR_S //alias <alias_name>
+persistent table ztgate_hdr_s
+draft table ztgate_out_sd
+lock master
+total etag created_by
+authorization master ( instance )
+//early numbering
+//etag master <field_name>
+{
+  create ( authorization : global );
+  update;
+  delete;
+  field ( numbering : managed, readonly ) zid;
+  field ( readonly ) Zgate, Gateindt, Gateinout, Gateoutdt, Gateoutout;
+  //  action CreateGrn result [1] $self;
+  field ( readonly ) Net;
+  field ( features : instance ) Gross, Tare, chk;
+
+  action ( features : instance ) FetchT1 result [1] $self;
+  draft action Edit;
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Resume;
+  draft determine action Prepare;
+
+  association _ADV_item1 { create; with draft; }
+  action ref result [1] $self;
+  determination setDefaults on modify { field Zgate; create; }
+  determination setGateInDateTime1 on modify { create; field Tare; }
+  determination Calculatenet1 on modify { field Gross, Tare, pack; }
+  //  side effects { field chk affects field Gross, field Tare; }
+  side effects
+  {
+    field chk affects field Gross, field Tare;
+    field Chk1 affects field Gross, field Tare;
+    entity _ADV_item1 affects field Gross, field Tare;
+  }
+  mapping for ztgate_hdr_s
+    {
+      zid        = zid;
+      zgate      = zgate;
+      plant      = plant;
+      gateindt   = gateindt;
+      gateinout  = gateinout;
+      gateoutdt  = gateoutdt;
+      gateoutout = gateoutout;
+      vehno      = vehno;
+      oname      = oname;
+      drvlicen   = drvlicen;
+      remark     = remark;
+      bill       = bill;
+//      tare       = tare;
+//      gross      = gross;
+//      net        = net;
+//      pack       = pack;
+      chk        = chk;
+      Chk1       = chk1;
+      trans      = trans;
+      //  created_by  =
+    }
+}
+
+define behavior for ZI_GATEENTRY_ITM_S //alias <alias_name>
+persistent table ztgate_item_s
+draft table ztout_itm_dr
+lock dependent by _ADV_HEAD1
+authorization dependent by _ADV_HEAD1
+//etag master <field_name>
+{
+  update;
+  delete;
+
+  determination CalculateItemDetails on modify { field Outbounddelivery, Outbounddeliveryitem; }
+  validation ValidateGateItem on save { field Outbounddelivery, Outbounddeliveryitem; create; update; }
+
+  field ( readonly ) zgate, zid;
+  field ( readonly ) product, productdescription, batch, storagelocation, soldtoparty, customerdescription, baseunit, actualdeliveryquantity;
+  association _ADV_HEAD1 { with draft; }
+
+  side effects { field Outbounddelivery affects field _ADV_HEAD1.Gross, field _ADV_HEAD1.Tare; }
+
+  mapping for ztgate_item_s
+    {
+      zid                    = zid;
+      zgate                  = zgate;
+      outbounddelivery       = outbounddelivery;
+      outbounddeliveryitem   = outbounddeliveryitem;
+      product                = product;
+      productdescription     = productdescription;
+      batch                  = batch;
+      storagelocation        = storagelocation;
+      soldtoparty            = soldtoparty;
+      customerdescription    = customerdescription;
+      baseunit               = baseunit;
+      actualdeliveryquantity = actualdeliveryquantity;
+      remark                 = remark;
+    }
+
+}

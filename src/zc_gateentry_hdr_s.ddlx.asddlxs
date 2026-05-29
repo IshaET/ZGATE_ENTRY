@@ -1,0 +1,201 @@
+@Metadata.layer: #CORE
+
+@UI: {
+  headerInfo: { typeName: 'Gate Entry',
+                typeNamePlural: 'Gate Entry',
+                title: { type: #STANDARD, label: 'Gate Entry', value: 'Zgate' }, imageUrl: 'PicUrl'
+  }
+  }
+annotate entity ZC_GATEENTRY_hdr_S
+    with 
+{
+  
+   @UI.facet: [
+  {
+                    purpose: #HEADER,
+                    type: #DATAPOINT_REFERENCE,
+                    label: 'Status',
+                    position: 20,
+                    targetQualifier: 'status'
+                },
+
+  {
+    id: 'Header',
+    purpose: #STANDARD,
+    type: #IDENTIFICATION_REFERENCE,
+    label: 'Gate Entry Details',
+    position: 10
+  },
+   { id : 'Item',
+              purpose: #STANDARD,
+              type: #LINEITEM_REFERENCE,
+              label: 'Gate Entry Item',
+              position: 20,
+              targetElement: '_ADV_item1'}
+
+  ]
+
+  /* =========================
+     GATE NO
+     ========================= */
+    
+  @UI: {
+    lineItem:[{ position: 10, label: 'Gate No' }],
+    identification:[{ position: 10, label: 'Gate Entry No' }
+     ],
+    selectionField:[{ position: 10 }]
+  }
+//   @UI.dataPoint: { qualifier: 'abs', title: 'Person Responsible' }
+    
+  //     { type: #FOR_ACTION, label: 'PO creation', dataAction: 'create_po' }
+  Zgate;
+
+
+  /* =========================
+     BASIC DETAILS
+     ========================= */
+  @UI: {
+    lineItem:[{ position: 20,label: 'Plant' }],
+    identification:[{ position: 20, label: 'Plant' },{ type: #FOR_ACTION, label: 'Refresh', dataAction: 'ref' }],
+    selectionField:[{ position: 20 }]
+  }
+//  @UI.dataPoint: { title: 'Plant', qualifier: 'status' }
+//  @UI.dataPoint: { title: 'Plant', qualifier: 'status' }
+  @Consumption.valueHelpDefinition: [{
+    entity: { name: 'I_Plant', element: 'Plant' }
+}]
+  Plant;
+  
+   @UI.dataPoint: { title: 'Plant', qualifier: 'status' }
+  PlantName;
+
+  @UI: {
+    lineItem:[{ position: 30, label: 'Vehicle No' }],
+    identification:[{ position: 30, label: 'Vehicle No' },{ type: #FOR_ACTION, label: 'Fetch Weight', dataAction: 'FetchT1' }]
+  }
+  Vehno;
+
+  @UI: {
+    lineItem:[{ position: 40, label: 'Owner Name' }],
+    identification:[{ position: 40, label: 'Operator Name' }]
+  }
+  Oname;
+
+  @UI: {
+    lineItem:[{ position: 50, label: 'Driver License No' }],
+    identification:[{ position: 50, label: 'Driver License No' }]
+  }
+  Drvlicen;
+
+
+  /* =========================
+     GATE IN
+     ========================= */
+  @UI: {
+    lineItem:[{ position: 60, label: 'Gate In Date' }],
+    identification:[{ position: 60, label: 'Gate In Date' }],
+    selectionField:[{ position: 60 }]
+  }
+  Gateindt;
+
+  @UI: {
+    lineItem:[{ position: 70, label: 'Gate In Time' }],
+    identification:[{ position: 70, label: 'Gate In Time' }]
+  }
+  Gateinout;
+
+
+  /* =========================
+     GATE OUT
+     ========================= */
+  @UI: {
+    lineItem:[{ position: 80, label: 'Gate Out Date' }],
+    identification:[{ position: 80, label: 'Gate Out Date' }],
+    selectionField:[{ position: 80 }]
+  }
+  Gateoutdt;
+
+  @UI: {
+    lineItem:[{ position: 90, label: 'Gate Out Time' }],
+    identification:[{ position: 90, label: 'Gate Out Time' }]
+  }
+  Gateoutout;
+
+
+  /* =========================
+     BILL & REMARKS
+     ========================= */
+  @UI: {
+    lineItem:[{ position: 100, label: 'Bill No' }],
+    identification:[{ position: 100, label: 'Bill/Challan' }]
+  }
+  Bill;
+
+  @UI: {
+    lineItem:[{ position: 110, label: 'Remarks' }],
+    identification:[{ position: 110, label: 'Remarks' }]
+  }
+  Remark;
+
+
+  /* =========================
+     WEIGHT DETAILS
+     ========================= */
+//  @UI: {
+//    lineItem:[{ position: 120, label: 'Tare Weight' }],
+//    identification:[{ position: 120, label: 'Tare Weight' }]
+//  }
+//  Tare;
+//
+//  @UI: {
+//    lineItem:[{ position: 130, label: 'Gross Weight' }],
+//    identification:[{ position: 130, label: 'Gross Weight' }]
+//  }
+//  Gross;
+//
+//  @UI: {
+//    lineItem:[{ position: 140, label: 'Net Weight' }],
+//    identification:[{ position: 140, label: 'Net Weight' }]
+//  }
+//  Net;
+//  
+//   @UI: {
+//    lineItem:[{ position: 150, label: 'Packing Weight' }],
+//    identification:[{ position: 150, label: 'Packing Weight' }]
+//  }
+//  @UI.hidden: true
+//  pack;
+
+
+  /* =========================
+     CHECK
+     ========================= */
+  @UI: {
+    lineItem:[{ position: 160, label: 'Capture Manual' }],
+    identification:[{ position: 160, label: 'Capture Manual' }]
+  }
+  Chk;
+  
+   @UI: {
+    lineItem:[{ position: 161, label: 'Return Delivery' }],
+    identification:[{ position: 161, label: 'Return Delivery' }]
+  }
+  Chk1;
+
+    @UI: {
+    lineItem:[{ position: 162, label: 'Document' }],
+    identification:[{ position: 162, label: 'Document' }]
+  }
+  
+  mblnr;
+  
+   @UI: {
+    lineItem:[{ position: 163, label: 'Transporter' }],
+    identification:[{ position: 163, label: 'Transporter' }]
+  }
+  @Consumption.valueHelpDefinition: [{
+    entity: { name: 'ZI_Transporter_VH', element: 'Supplier' }
+  }]
+  trans;
+    
+}

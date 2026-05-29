@@ -1,0 +1,34 @@
+{
+  "formatVersion": "2",
+  "header": {
+    "description": "An SAP Fiori application.",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "generalInformation": {
+    "appType": "ui5",
+    "catalogId": "SAP_TC_UI5_REPO_UIAD",
+    "targetMappingTitle": "RGP/NRGP"
+  },
+  "ui5AppDetails": {
+    "appId": "zgateentryrgp"
+  },
+  "navigation": {
+    "targetMappingId": "UI5R_BE175B3DE0DE8343438A81BDB04A0B8513A4154D_TM",
+    "semanticObject": "zgate_entry_rgp",
+    "action": "display",
+    "desktop": true,
+    "tablet": true,
+    "phone": true
+  },
+  "tiles": [
+    {
+      "id": "UI5R_BE175B3DE0DE8343438A81BDB04A0B8513A4154D_AL",
+      "tileType": "static",
+      "isDefault": true,
+      "standard": {
+        "title": "RGP/NRGP"
+      }
+    }
+  ]
+}

@@ -1,0 +1,126 @@
+managed implementation in class zbp_i_gateentry_hdr_r unique;
+strict ( 2 );
+with draft;
+
+define behavior for ZI_GATEENTRY_hdr_R //alias <alias_name>
+persistent table ztgate_hdr_r
+draft table ztgate_hdr_r_dr
+lock master
+total etag CreatedBy
+authorization master ( instance )
+
+
+///early numbering
+//{
+//  create ( authorization : global );
+//  update ( features : instance );
+//  delete;
+//  field ( numbering : managed, readonly ) zid;
+//  field ( readonly ) Zgate, Gateindt, Gateinout, Gateoutdt, Gateoutout, mblnr, Net;
+//  field ( features : instance ) Gross, Tare, Chk;
+//
+
+
+{
+  create ( authorization : global );
+  update ;
+  delete;
+  field ( numbering : managed, readonly ) zid;
+  field ( readonly ) Zgate, gateindt, Gateinout, Gateoutdt, Gateoutout;
+
+  draft action Edit;
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Resume;
+  draft determine action Prepare;
+
+  determination setDefaults1 on modify { field Zgate; create; }
+  determination setClockIn on modify { create; }
+
+  validation ValidateStorageLocation on save { field Type; create; update; }
+
+  association _ADV_itemR { create; }
+
+  mapping for ztgate_hdr_r
+    {
+      zid        = zid;
+      zgate      = zgate;
+      plant      = plant;
+      gateindt   = gateindt;
+      gateinout  = gateinout;
+      gateoutdt  = gateoutdt;
+      gateoutout = gateoutout;
+      vehno      = vehno;
+      oname      = oname;
+      drvlicen   = drvlicen;
+      remark     = remark;
+      bill       = bill;
+      tare       = tare;
+      gross      = gross;
+      net        = net;
+      pack       = pack;
+      chk        = chk;
+      trans      = trans;
+      createdby  = created_by;
+      gjahr      = gjahr;
+      bukrs      = bukrs;
+      Type       = type;
+    }
+
+}
+
+define behavior for ZI_GATEENTRY_itm_R alias ITEM
+//implementation in class zbp_i_gateentry_item unique
+persistent table ztgate_item_r
+draft table ztgate_item_r_dr
+lock dependent by _ADV_HEADr
+authorization dependent by _ADV_HEADr
+{
+  update;
+  delete;
+
+  determination CalculateItemDetails on modify { field ChallanNo, mblnr, posnr, zeile; }
+  determination CalculateItemDetails1 on modify { field quantity, returnqty; }
+
+
+  //  determination CalculateItemDetails on modify { field ChallanNo, mblnr, zeile; }
+  //  determination CalculateItemDetails1 on modify { field quantity, returnqty; }
+  determination setClockOut on modify { create; }
+
+
+  determination setItemZgate on modify { create; }
+
+  validation ValidateDocument on save { field ChallanNo, mblnr, posnr, zeile; create; update; }
+
+  field ( readonly ) zid, Zgate;
+  field ( readonly ) maktx, charg, Uom, balanceqty;
+
+  field ( features : instance ) ReturnDate, returnqty;
+
+  association _ADV_HEADr;
+
+  mapping for ztgate_item_r
+    {
+      zid           = zid;
+      zgate         = zgate;
+      ChallanNo     = challan_no;
+      posnr         = posnr;
+      mblnr         = mblnr;
+      zeile         = zeile;
+      matnr         = matnr;
+      maktx         = maktx;
+      charg         = charg;
+      werks         = werks;
+      quantity      = quantity;
+      uom           = uom;
+      value         = value;
+      ReturnDate    = return_date;
+      returnqty     = return_qty;
+      balanceqty    = balance_qty;
+      remarks       = remarks;
+      createdby     = created_by;
+      createdon     = created_on;
+      lastchangedby = last_changed_by;
+      lastchangedon = last_changed_on;
+    }
+}

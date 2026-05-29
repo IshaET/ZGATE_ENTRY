@@ -1,0 +1,34 @@
+{
+  "formatVersion": "2",
+  "header": {
+    "description": "An SAP Fiori application.",
+    "originalLanguage": "en",
+    "abapLanguageVersion": "cloudDevelopment"
+  },
+  "generalInformation": {
+    "appType": "ui5",
+    "catalogId": "SAP_TC_UI5_REPO_UIAD",
+    "targetMappingTitle": "User ID"
+  },
+  "ui5AppDetails": {
+    "appId": "zpruiuserido4"
+  },
+  "navigation": {
+    "targetMappingId": "UI5R_71297A4285D91C82335AAFF5AFE0FF810EAF67C3_TM",
+    "semanticObject": "zprui_user_id_o4",
+    "action": "display",
+    "desktop": true,
+    "tablet": true,
+    "phone": true
+  },
+  "tiles": [
+    {
+      "id": "UI5R_71297A4285D91C82335AAFF5AFE0FF810EAF67C3_AL",
+      "tileType": "static",
+      "isDefault": true,
+      "standard": {
+        "title": "User ID"
+      }
+    }
+  ]
+}

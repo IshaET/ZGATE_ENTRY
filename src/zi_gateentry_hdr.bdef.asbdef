@@ -1,0 +1,327 @@
+managed implementation in class zbp_i_gateentry_hdr unique;
+strict ( 2 );
+with draft;
+
+define behavior for ZI_GATEENTRY_hdr alias HDR
+//with unmanaged save
+
+persistent table ztgate_hdr
+draft table ztgate_hdr_sd
+lock master
+total etag created_by
+authorization master ( instance )
+etag master created_by
+//early numbering
+{
+  create ( authorization : global );
+  update ( features : instance );
+  delete;
+  field ( numbering : managed, readonly ) zid;
+  field ( readonly ) Zgate, Gateindt, Gateinout, Gateoutdt, Gateoutout, mblnr, Net;
+  field ( features : instance ) Gross, Tare, Chk;
+
+  draft action Edit;
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Resume;
+  //  draft determine action Prepare;
+  draft determine action Prepare
+  {
+    validation ITEM~ebeln;
+    validation ITEM~ValidateStorageLocation;
+    validation ValidateGrossTare;
+  }
+
+  action ( features : instance ) FetchT result [1] $self;
+  action ZPRINT result [1] $self;
+
+  //  field ( numbering : managed, readonly ) zid;
+  determination setDefaults on modify { field Zgate; create; }
+  determination Calculatenet on modify { field Gross, Tare, pack; }
+
+  validation ValidateGrossTare on save { field Gross, Tare; create; update; }
+
+  determination setGateInDateTime on modify { create; field Gross; }
+
+  //  validation ValidateGateOut on save { field Gateoutdt, Gateoutout; create; update; }
+  action ( features : instance ) CreateGrn result [1] $self;
+  //  action CreateGrn result [1] $self;
+  action ref result [1] $self;
+  //  side effects { action ref affects entity _ADV_item;  }
+  side effects
+  {
+    action ref affects entity _ADV_item;
+    // ADDED: Real-time UI refresh when changing weight fields
+    field Gross affects field Net, entity _ADV_item;
+    field Tare affects field Net, entity _ADV_item;
+    field pack affects field Net, entity _ADV_item;
+  }
+  association _ADV_item { create; with draft; }
+
+
+
+  mapping for ztgate_hdr
+    {
+      zid        = zid;
+      Zgate      = zgate;
+      Plant      = plant;
+      Gateindt   = gateindt;
+      Gateinout  = gateinout;
+      Gateoutdt  = gateoutdt;
+      Gateoutout = gateoutout;
+      //      Gateinout_txt = g
+      Vehno      = vehno;
+      Oname      = oname;
+      Drvlicen   = drvlicen;
+      Remark     = remark;
+      Bill       = bill;
+//      Tare       = tare;
+//      Gross      = gross;
+//      Net        = net;
+//      pack       = pack;
+      Chk        = chk;
+      mblnr      = mblnr;
+      gjahr      = gjahr;
+      bukrs      = bukrs;
+      created_by = created_by;
+      trans      = trans;
+      base64     = base64;
+    }
+}
+
+define behavior for ZI_GATEENTRY_ITM alias ITEM
+//implementation in class zbp_i_gateentry_item unique
+persistent table ztgate_item
+draft table ztgate_itm_sd
+lock dependent by _ADV_HEAD
+authorization dependent by _ADV_HEAD
+{
+  update ( precheck );
+  delete;
+
+  determination CalculateItemDetails on modify { field Ebeln; field Ebelp; }
+  // 1. UPDATE THIS: Include Ebelp in the validation
+  validation ebeln on save { field Ebeln, Ebelp; create; update; }
+
+  // 2. ADD THIS: Side effects tell the UI to refresh instantly when PO/Item are entered
+  //  side effects {
+  //    field Ebeln affects $self;
+  //    field Ebelp affects $self;
+  //  }
+  side effects
+  {
+    field Ebeln affects field Vend, field Name, field Mat, field Matdesc, field OrderQty, field Uom;
+    field Ebelp affects field Vend, field Name, field Mat, field Matdesc, field OrderQty, field Uom;
+  }
+  //  side effects {
+  //  field Ebeln affects $self, entity _ADV_HEAD;
+  //  field Ebelp affects $self, entity _ADV_HEAD;
+  //}
+
+  action ( features : instance ) save0 result [1] $self;
+  //  action save0 result [1] $self;
+  //  determination CalculateItemDetails on modify { field Ebeln, Ebelp; }
+
+  field ( readonly ) zid, Zgate;
+  //  field ( mandatory ) Ebeln, Ebelp;
+//  field ( readonly : update ) ReceivedQty;
+  field ( readonly ) Vend, Name, Mat, Matdesc, OrderQty, Uom,mblnr;
+  //  field ( readonly ) Ebeln, Ebelp;
+//  validation validateqty on save { field qty; create; update; }
+  validation ValidateStorageLocation on save { field storage; create; update; }
+//    validation ValidateReceivedQty on save { field ReceivedQty; create; update; }
+  //  determination ebeln on modify { field Ebeln, Ebelp; }
+  //  validation ebeln on save { field Ebeln; create; update; }
+  //  validation ebeln on save { field Ebeln; create; update; }
+  association _ADV_HEAD { with draft; }
+
+  //  side effects
+  //  {
+  //      field ReceivedQty
+  ////      affects field new_qty,
+  //        affects $self;
+  //  }
+
+  mapping for ztgate_item
+    {
+      zid         = zid;
+      Zgate       = zgate;
+      Ebeln       = ebeln;
+      Ebelp       = ebelp;
+      Vend        = vend;
+      Name        = name;
+      Mat         = mat;
+      Matdesc     = matdesc;
+      Storage     = Storage;
+      OrderQty    = order_qty;
+      ReceivedQty = received_qty;
+      Uom         = uom;
+      qty         = qty;
+      BillNo      = bill_no;
+      Remark      = remark;
+      mblnr       = mblnr;
+      gjahr       = gjahr;
+      bukrs       = bukrs;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//managed implementation in class zbp_i_gateentry_hdr unique;
+//strict ( 2 );
+//with draft;
+//
+//define behavior for ZI_GATEENTRY_hdr alias HDR
+//persistent table ztgate_hdr
+//draft table ztgate_hdr_sd
+//lock master
+//total etag created_by
+//authorization master ( instance )
+//etag master created_by
+////early numbering
+//{
+//  create ( authorization : global );
+//  update ( features : instance );
+//  delete;
+//  field ( numbering : managed, readonly ) zid;
+//  field ( readonly ) Zgate, Gateindt, Gateinout, Gateoutdt, Gateoutout, mblnr, Net;
+//  field ( features : instance ) Gross, Tare, Chk;
+//
+//  association _ADV_item { create; with draft; }
+//
+//  draft action Edit;
+//  draft action Activate optimized;
+//  draft action Discard;
+//  draft action Resume;
+//  draft determine action Prepare
+//  {
+//    validation ITEM~ebeln;
+//    validation ITEM~ValidateStorageLocation;
+//    validation ValidateGrossTare;
+//  }
+//
+//  action ( features : instance ) FetchT result [1] $self;
+//  action ( features : instance ) CreateGrn result [1] $self;
+//  action ref result [1] $self;
+//  action ZPRINT result [1] $self;
+//
+//  determination setDefaults on modify { field Zgate; create; }
+//  determination Calculatenet on modify { field Gross, Tare, pack; }
+//  determination setGateInDateTime on modify { create; field Gross; }
+//
+//  validation ValidateGrossTare on save { field Gross, Tare; create; update; }
+//
+//  side effects
+//  {
+//    action ref affects entity _ADV_item;
+//    field Gross affects field Net, entity _ADV_item;
+//    field Tare affects field Net, entity _ADV_item;
+//    field pack affects field Net, entity _ADV_item;
+//  }
+//
+//  mapping for ztgate_hdr
+//    {
+//      zid        = zid;
+//      Zgate      = zgate;
+//      Plant      = plant;
+//      Gateindt   = gateindt;
+//      Gateinout  = gateinout;
+//      Gateoutdt  = gateoutdt;
+//      Gateoutout = gateoutout;
+//      Vehno      = vehno;
+//      Oname      = oname;
+//      Drvlicen   = drvlicen;
+//      Remark     = remark;
+//      Bill       = bill;
+//      Tare       = tare;
+//      Gross      = gross;
+//      Net        = net;
+//      pack       = pack;
+//      Chk        = chk;
+//      mblnr      = mblnr;
+//      gjahr      = gjahr;
+//      bukrs      = bukrs;
+//      created_by = created_by;
+//      trans      = trans;
+//      base64     = base64;
+//    }
+//}
+//
+//define behavior for ZI_GATEENTRY_ITM alias ITEM
+//persistent table ztgate_item
+//draft table ztgate_itm_sd
+//lock dependent by _ADV_HEAD
+//authorization dependent by _ADV_HEAD
+//{
+//  update ( precheck );
+//  delete;
+//
+//  field ( readonly ) zid, Zgate, Vend, Name, Mat, Matdesc, OrderQty, Uom, ReceivedQty, mblnr;
+//
+//  association _ADV_HEAD { with draft; }
+//
+//  action ( features : instance ) save0 result [1] $self;
+//
+//  determination CalculateItemDetails on modify { field Ebeln; field Ebelp; }
+//
+//  validation ebeln on save { field Ebeln, Ebelp; create; update; }
+//  validation ValidateStorageLocation on save { field storage; create; update; }
+//
+//  side effects
+//  {
+//    field Ebeln affects field Vend, field Name, field Mat, field Matdesc, field OrderQty, field Uom;
+//    field Ebelp affects field Vend, field Name, field Mat, field Matdesc, field OrderQty, field Uom;
+//  }
+//
+//  mapping for ztgate_item
+//    {
+//      zid         = zid;
+//      Zgate       = zgate;
+//      Ebeln       = ebeln;
+//      Ebelp       = ebelp;
+//      Vend        = vend;
+//      Name        = name;
+//      Mat         = mat;
+//      Matdesc     = matdesc;
+//      Storage     = Storage;
+//      OrderQty    = order_qty;
+//      ReceivedQty = received_qty;
+//      Uom         = uom;
+//      qty         = qty;
+//      BillNo      = bill_no;
+//      Remark      = remark;
+//      mblnr       = mblnr;
+//      gjahr       = gjahr;
+//      bukrs       = bukrs;
+//    }
+//}

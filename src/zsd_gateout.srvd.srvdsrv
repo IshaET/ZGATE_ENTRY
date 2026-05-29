@@ -1,0 +1,5 @@
+@EndUserText.label: 'Gate out'
+define service ZSD_GATEOUT {
+  expose ZC_GATEENTRY_hdr_S;
+  expose ZC_GATEENTRY_ITM_S;
+}

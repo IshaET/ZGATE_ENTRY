@@ -1,0 +1,11 @@
+@EndUserText: {
+  label: 'Service Definition for ZPRC_USER_ID'
+}
+@ObjectModel: {
+  leadingEntity: {
+    name: 'ZPRC_USER_ID'
+  }
+}
+define service ZPRUI_USER_ID_O4 provider contracts odata_v4_ui {
+  expose ZPRC_USER_ID;
+}

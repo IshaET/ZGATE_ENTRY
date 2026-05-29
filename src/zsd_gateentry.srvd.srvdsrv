@@ -1,0 +1,5 @@
+@EndUserText.label: 'Gate Entry'
+define service ZSD_GATEENTRY {
+  expose ZC_GATEENTRY_hdr;
+  expose ZC_GATEENTRY_ITM;
+}
